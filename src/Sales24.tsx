@@ -1,6 +1,6 @@
 import {AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 
-const C = {bg: '#070b1a', card: 'rgba(255,255,255,0.07)', line: 'rgba(255,255,255,0.14)', ok: '#22e3a0', bad: '#ff5470', blue: '#5b8cff', violet: '#a66bff', text: '#f4f6ff'};
+const C = {bg: '#070b1a', card: 'rgba(255,255,255,0.07)', line: 'rgba(255,255,255,0.14)', ok: '#38d0ff', bad: '#9db8ff', blue: '#2f6bff', violet: '#1d3fd8', text: '#f4f6ff'};
 const FONT = 'Helvetica, Arial, sans-serif';
 
 const useSpring = (delay = 0, damping = 14) => {
@@ -23,13 +23,13 @@ const Scene: React.FC<{children: React.ReactNode; glow?: string}> = ({children, 
 );
 
 const Btn: React.FC<{label: string; primary?: boolean; scale?: number; size?: number}> = ({label, primary, scale = 1, size = 44}) => (
-  <div style={{display: 'inline-block', fontSize: size, fontWeight: 800, padding: '22px 50px', borderRadius: 999, transform: `scale(${scale})`, color: primary ? '#06101f' : C.text, background: primary ? `linear-gradient(90deg, ${C.ok}, #5be7ff)` : C.card, border: primary ? 'none' : `2px solid ${C.line}`, boxShadow: primary ? `0 0 60px ${C.ok}66` : 'none'}}>{label}</div>
+  <div style={{display: 'inline-block', fontSize: size, fontWeight: 800, padding: '22px 50px', borderRadius: 999, transform: `scale(${scale})`, color: primary ? '#04112e' : C.text, background: primary ? `linear-gradient(90deg, ${C.ok}, #8fe6ff)` : C.card, border: primary ? 'none' : `2px solid ${C.line}`, boxShadow: primary ? `0 0 60px ${C.ok}66` : 'none'}}>{label}</div>
 );
 
 const Browser: React.FC<{children: React.ReactNode; url?: string; height?: number}> = ({children, url = 'deine-firma.de', height = 1000}) => (
   <div style={{width: 940, height, borderRadius: 36, background: '#0e1430', border: `2px solid ${C.line}`, boxShadow: '0 40px 120px rgba(0,0,0,.6)', overflow: 'hidden'}}>
     <div style={{height: 84, display: 'flex', alignItems: 'center', gap: 14, padding: '0 28px', background: 'rgba(255,255,255,.06)'}}>
-      {['#ff5f57', '#febc2e', '#28c840'].map((c) => <div key={c} style={{width: 22, height: 22, borderRadius: 11, background: c}} />)}
+      {['#9db8ff', '#5b8cff', '#38d0ff'].map((c) => <div key={c} style={{width: 22, height: 22, borderRadius: 11, background: c}} />)}
       <div style={{marginLeft: 20, flex: 1, height: 48, borderRadius: 24, background: 'rgba(255,255,255,.08)', fontSize: 28, display: 'flex', alignItems: 'center', padding: '0 24px', opacity: 0.8}}>🔒 {url}</div>
     </div>
     <div style={{position: 'relative', height: height - 84, overflow: 'hidden'}}>{children}</div>
@@ -44,7 +44,7 @@ const Hook: React.FC = () => {
     <Scene>
       <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: 70}}>
         <div style={{fontSize: 56, fontWeight: 700, opacity: 0.7, transform: `scale(${a})`}}>Website selbst mit KI bauen?</div>
-        <div style={{fontSize: 150, fontWeight: 900, lineHeight: 1, marginTop: 30, transform: `scale(${b})`, background: `linear-gradient(90deg, ${C.bad}, #ffb86b)`, WebkitBackgroundClip: 'text', color: 'transparent'}}>
+        <div style={{fontSize: 150, fontWeight: 900, lineHeight: 1, marginTop: 30, transform: `scale(${b})`, background: `linear-gradient(90deg, ${C.bad}, #e6efff)`, WebkitBackgroundClip: 'text', color: 'transparent'}}>
           Das kostet dich mehr!
         </div>
       </AbsoluteFill>
@@ -92,7 +92,7 @@ const Pivot: React.FC = () => {
     <Scene glow={C.ok}>
       <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: 70}}>
         <div style={{fontSize: 90, fontWeight: 700, opacity: 0.8}}>Oder du lässt es</div>
-        <div style={{fontSize: 190, fontWeight: 900, lineHeight: 1, transform: `scale(${a})`, background: `linear-gradient(90deg, ${C.ok}, #5be7ff)`, WebkitBackgroundClip: 'text', color: 'transparent'}}>
+        <div style={{fontSize: 190, fontWeight: 900, lineHeight: 1, transform: `scale(${a})`, background: `linear-gradient(90deg, ${C.ok}, #8fe6ff)`, WebkitBackgroundClip: 'text', color: 'transparent'}}>
           uns machen.
         </div>
       </AbsoluteFill>
@@ -158,11 +158,11 @@ const Compare: React.FC = () => {
       <AbsoluteFill style={{alignItems: 'center', padding: '110px 60px', textAlign: 'center'}}>
         <div style={{display: 'flex', gap: 40, alignItems: 'flex-end', height: 520}}>
           <div style={{width: 380}}>
-            <div style={{height: 400 * diy, borderRadius: 28, background: `linear-gradient(180deg, ${C.bad}, #8a1f3a)`}} />
+            <div style={{height: 400 * diy, borderRadius: 28, background: `linear-gradient(180deg, ${C.bad}, #3a5fd0)`}} />
             <div style={{fontSize: 38, fontWeight: 800, marginTop: 16}}>Selbst machen<br /><span style={{color: C.bad}}>40 Std. + Abo + Extras</span></div>
           </div>
           <div style={{width: 380}}>
-            <div style={{height: 400 * us * 1.4, borderRadius: 28, background: `linear-gradient(180deg, ${C.ok}, #0f8f66)`}} />
+            <div style={{height: 400 * us * 1.4, borderRadius: 28, background: `linear-gradient(180deg, ${C.ok}, #0b6fb0)`}} />
             <div style={{fontSize: 38, fontWeight: 800, marginTop: 16}}>Mit uns<br /><span style={{color: C.ok}}>59 € / Monat</span></div>
           </div>
         </div>
