@@ -1,4 +1,4 @@
-import {AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, Sequence, staticFile, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 
 const BG = 'linear-gradient(170deg, #0b1020 0%, #1a1146 100%)';
 const ACCENT = '#22e3a0';
@@ -130,6 +130,7 @@ const Cta: React.FC = () => {
 
 export const Webseite59: React.FC = () => (
   <AbsoluteFill style={{background: BG}}>
+    <Audio src={staticFile('voice.wav')} />
     <Sequence from={0} durationInFrames={75}>
       <Fade duration={75}><Hook /></Fade>
     </Sequence>
