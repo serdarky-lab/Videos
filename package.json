@@ -6,6 +6,7 @@
     "studio": "remotion studio src/index.ts",
     "render": "remotion render src/index.ts Hello out/hello.mp4",
     "still": "remotion still src/index.ts Hello out/hello.png --frame=60",
+    "render:sales24": "remotion render src/index.ts Sales24 out/sales24.mp4",
     "render:webseite": "remotion render src/index.ts Webseite59 out/webseite59.mp4"
   },
   "dependencies": {

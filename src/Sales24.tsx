@@ -1,5 +1,5 @@
 import {createContext, useContext} from 'react';
-import {AbsoluteFill, Sequence, interpolate, random, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, Sequence, staticFile, interpolate, random, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 
 const C = {bg: '#070b1a', card: 'rgba(255,255,255,0.07)', line: 'rgba(255,255,255,0.14)', ok: '#38d0ff', bad: '#9db8ff', blue: '#2f6bff', violet: '#1d3fd8', text: '#f4f6ff'};
 const FONT = 'Helvetica, Arial, sans-serif';
@@ -258,11 +258,12 @@ const Cta: React.FC = () => {
 
 export const Sales24: React.FC = () => (
   <AbsoluteFill>
+    <Audio src={staticFile('voice24.wav')} />
     <Sequence from={0} durationInFrames={90}><Offset.Provider value={0}><Hook /></Offset.Provider></Sequence>
     <Sequence from={90} durationInFrames={180}><Offset.Provider value={90}><Diy /></Offset.Provider></Sequence>
     <Sequence from={270} durationInFrames={60}><Offset.Provider value={270}><Pivot /></Offset.Provider></Sequence>
     <Sequence from={330} durationInFrames={210}><Offset.Provider value={330}><Demo /></Offset.Provider></Sequence>
     <Sequence from={540} durationInFrames={120}><Offset.Provider value={540}><Compare /></Offset.Provider></Sequence>
-    <Sequence from={660} durationInFrames={60}><Offset.Provider value={660}><Cta /></Offset.Provider></Sequence>
+    <Sequence from={660} durationInFrames={90}><Offset.Provider value={660}><Cta /></Offset.Provider></Sequence>
   </AbsoluteFill>
 );
