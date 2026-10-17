@@ -1,4 +1,5 @@
-import {AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {createContext, useContext} from 'react';
+import {AbsoluteFill, Sequence, interpolate, random, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 
 const C = {bg: '#070b1a', card: 'rgba(255,255,255,0.07)', line: 'rgba(255,255,255,0.14)', ok: '#38d0ff', bad: '#9db8ff', blue: '#2f6bff', violet: '#1d3fd8', text: '#f4f6ff'};
 const FONT = 'Helvetica, Arial, sans-serif';
@@ -10,14 +11,78 @@ const useSpring = (delay = 0, damping = 14) => {
 };
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
-const Glow: React.FC<{color: string; x: string; y: string; size?: number}> = ({color, x, y, size = 900}) => (
-  <div style={{position: 'absolute', left: x, top: y, width: size, height: size, borderRadius: '50%', background: color, filter: 'blur(180px)', opacity: 0.35, transform: 'translate(-50%,-50%)'}} />
-);
+const Offset = createContext(0);
+// Globale Zeit, damit der Hintergrund über Szenenwechsel hinweg durchläuft
+const useGlobalFrame = () => useCurrentFrame() + useContext(Offset);
+
+const PARTICLES = Array.from({length: 90}, (_, i) => ({
+  x: random(`x${i}`) * 1080,
+  y0: random(`y${i}`) * 1920,
+  size: 4 + random(`s${i}`) * 12,
+  speed: 0.6 + random(`v${i}`) * 2.4,
+  drift: 20 + random(`d${i}`) * 60,
+  phase: random(`p${i}`) * 6.28,
+  hue: random(`h${i}`),
+}));
+
+const Particles: React.FC = () => {
+  const t = useGlobalFrame();
+  return (
+    <>
+      {PARTICLES.map((p, i) => {
+        const y = (((p.y0 - t * p.speed) % 2000) + 2000) % 2000 - 40;
+        const x = p.x + Math.sin(t / 40 + p.phase) * p.drift;
+        const o = 0.25 + 0.55 * (0.5 + 0.5 * Math.sin(t / 12 + p.phase));
+        const col = p.hue > 0.5 ? '#8fe6ff' : '#5b8cff';
+        return <div key={i} style={{position: 'absolute', left: x, top: y, width: p.size, height: p.size, borderRadius: '50%', background: col, opacity: o, boxShadow: `0 0 ${p.size * 3}px ${col}`}} />;
+      })}
+    </>
+  );
+};
+
+const GridFloor: React.FC = () => {
+  const t = useGlobalFrame();
+  const off = (t * 2) % 120;
+  return (
+    <div style={{position: 'absolute', inset: 0, opacity: 0.35, backgroundImage: `linear-gradient(${C.line} 2px, transparent 2px), linear-gradient(90deg, ${C.line} 2px, transparent 2px)`, backgroundSize: '120px 120px', backgroundPosition: `${off}px ${off}px`, WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 10%, transparent 75%)', maskImage: 'radial-gradient(circle at 50% 50%, black 10%, transparent 75%)'}} />
+  );
+};
+
+const Rings: React.FC = () => {
+  const t = useGlobalFrame();
+  return (
+    <>
+      {[0, 1, 2].map((i) => {
+        const k = ((t + i * 70) % 210) / 210;
+        return <div key={i} style={{position: 'absolute', left: '50%', top: '55%', width: 200 + k * 1500, height: 200 + k * 1500, borderRadius: '50%', border: `3px solid ${C.ok}`, opacity: (1 - k) * 0.25, transform: 'translate(-50%,-50%)'}} />;
+      })}
+    </>
+  );
+};
+
+const Sweep: React.FC = () => {
+  const t = useGlobalFrame();
+  const x = interpolate((t % 160) / 160, [0, 1], [-600, 1700]);
+  return <div style={{position: 'absolute', top: -200, left: x, width: 260, height: 2400, background: 'linear-gradient(90deg, transparent, rgba(143,230,255,.18), transparent)', transform: 'rotate(20deg)'}} />;
+};
+
+const Glow: React.FC<{color: string; x: string; y: string; size?: number; phase?: number}> = ({color, x, y, size = 900, phase = 0}) => {
+  const t = useGlobalFrame();
+  const dx = Math.sin(t / 50 + phase) * 140;
+  const dy = Math.cos(t / 60 + phase) * 140;
+  const sc = 1 + 0.12 * Math.sin(t / 35 + phase);
+  return <div style={{position: 'absolute', left: x, top: y, width: size, height: size, borderRadius: '50%', background: color, filter: 'blur(180px)', opacity: 0.38, transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(${sc})`}} />;
+};
 
 const Scene: React.FC<{children: React.ReactNode; glow?: string}> = ({children, glow = C.blue}) => (
   <AbsoluteFill style={{background: C.bg, fontFamily: FONT, color: C.text, overflow: 'hidden'}}>
     <Glow color={glow} x="20%" y="15%" />
-    <Glow color={C.violet} x="85%" y="85%" />
+    <Glow color={C.violet} x="85%" y="85%" phase={2} />
+    <Glow color={C.ok} x="75%" y="35%" size={600} phase={4} />
+    <GridFloor />
+    <Rings />
+    <Sweep />
+    <Particles />
     {children}
   </AbsoluteFill>
 );
@@ -193,11 +258,11 @@ const Cta: React.FC = () => {
 
 export const Sales24: React.FC = () => (
   <AbsoluteFill>
-    <Sequence from={0} durationInFrames={90}><Hook /></Sequence>
-    <Sequence from={90} durationInFrames={180}><Diy /></Sequence>
-    <Sequence from={270} durationInFrames={60}><Pivot /></Sequence>
-    <Sequence from={330} durationInFrames={210}><Demo /></Sequence>
-    <Sequence from={540} durationInFrames={120}><Compare /></Sequence>
-    <Sequence from={660} durationInFrames={60}><Cta /></Sequence>
+    <Sequence from={0} durationInFrames={90}><Offset.Provider value={0}><Hook /></Offset.Provider></Sequence>
+    <Sequence from={90} durationInFrames={180}><Offset.Provider value={90}><Diy /></Offset.Provider></Sequence>
+    <Sequence from={270} durationInFrames={60}><Offset.Provider value={270}><Pivot /></Offset.Provider></Sequence>
+    <Sequence from={330} durationInFrames={210}><Offset.Provider value={330}><Demo /></Offset.Provider></Sequence>
+    <Sequence from={540} durationInFrames={120}><Offset.Provider value={540}><Compare /></Offset.Provider></Sequence>
+    <Sequence from={660} durationInFrames={60}><Offset.Provider value={660}><Cta /></Offset.Provider></Sequence>
   </AbsoluteFill>
 );
