@@ -1,9 +1,11 @@
 import {Composition} from 'remotion';
 import {Hello} from './Hello';
+import {Webseite59} from './Webseite59';
 
 // 9:16 Hochformat für TikTok / Reels / Shorts
 export const Root: React.FC = () => {
   return (
+    <>
     <Composition
       id="Hello"
       component={Hello}
@@ -13,5 +15,7 @@ export const Root: React.FC = () => {
       height={1920}
       defaultProps={{title: 'Hallo Remotion', subtitle: 'Video per Code'}}
     />
+    <Composition id="Webseite59" component={Webseite59} durationInFrames={300} fps={30} width={1080} height={1920} />
+    </>
   );
 };
